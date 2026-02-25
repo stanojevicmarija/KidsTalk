@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KidsTalk — Online časovi engleskog i nemačkog za decu</title>
+  <meta name="description" content="Individualni online časovi stranih jezika za decu od 7 do 14 godina sa AI asistentom za vežbanje izgovora.">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ═══════════════════════════════════════
+       CSS — Ovo definiše IZGLED sajta.
+       Boje, fontovi, veličine, razmaci.
+       ═══════════════════════════════════════ */
+
+    /* Reset i osnovna pravila */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Nunito', 'Segoe UI', sans-serif;
+      color: #3d4f5f;
+      background: #fafcfe;
+      line-height: 1.6;
+    }
+
+    /* ─── Boje kao varijable ─── */
+    :root {
+      --primary: #4A90D9;
+      --primary-light: #e8f4fd;
+      --accent: #FF8C42;
+      --accent-light: #fff3e8;
+      --purple: #E8D5F5;
+      --purple-deep: #9b6fbf;
+      --dark: #2d3748;
+      --text: #3d4f5f;
+      --text-light: #6b7a8d;
+      --white: #ffffff;
+      --border: #edf2f7;
+      --green: #d4edda;
+      --green-deep: #38a169;
+    }
+
+    /* ─── Header (navigacija) ─── */
+    .header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(12px);
+      transition: box-shadow 0.3s;
+    }
+    .header.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 24px;
+    }
+    .logo {
+      font-family: 'Baloo 2', cursive;
+      font-size: 28px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      cursor: pointer;
+    }
+    .nav { display: flex; gap: 6px; align-items: center; }
+    .nav-link {
+      background: none; border: none; cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px; font-weight: 700;
+      color: var(--text-light);
+      padding: 8px 14px; border-radius: 8px;
+      transition: all 0.2s;
+    }
+    .nav-link:hover, .nav-link.active { color: var(--primary); background: var(--primary-light); }
+    .nav-btn-ai {
+      background: linear-gradient(135deg, var(--primary), #5BA0E6);
+      border: none; cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px; font-weight: 700; color: #fff;
+      padding: 8px 18px; border-radius: 50px;
+      box-shadow: 0 3px 12px rgba(74,144,217,0.3);
+      transition: all 0.2s;
+    }
+    .nav-btn-cta {
+      background: var(--accent); border: none; cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px; font-weight: 700; color: #fff;
+      padding: 8px 20px; border-radius: 50px;
+      box-shadow: 0 3px 12px rgba(255,140,66,0.3);
+      transition: all 0.2s;
+    }
+    .hamburger {
+      display: none; background: none; border: none;
+      font-size: 28px; cursor: pointer; color: var(--dark);
+    }
+    .mobile-menu {
+      display: none;
+      background: var(--white);
+      border-top: 1px solid var(--border);
+      padding: 16px 24px;
+      flex-direction: column; gap: 8px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu button {
+      background: none; border: none; cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+      font-size: 16px; font-weight: 700; color: var(--text);
+      padding: 12px 16px; border-radius: 10px; text-align: left;
+    }
+    .mobile-menu button:hover { background: var(--primary-light); color: var(--primary); }
+
+    @media (max-width: 900px) {
+      .nav { display: none; }
+      .hamburger { display: block; }
+    }
+
+    /* ─── Sekcije ─── */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    .section { padding: 72px 24px; }
+    .section-inner { max-width: 1060px; margin: 0 auto; }
+    .section-title {
+      text-align: center; margin-bottom: 44px;
+    }
+    .section-title h2 {
+      font-family: 'Baloo 2', cursive;
+      font-size: clamp(26px, 4vw, 36px);
+      font-weight: 800; color: var(--dark);
+      margin-bottom: 10px;
+    }
+    .section-title p {
+      color: var(--text-light); font-size: 16px;
+      max-width: 560px; margin: 0 auto;
+    }
+
+    /* ─── Hero ─── */
+    .hero {
+      background: linear-gradient(160deg, var(--primary-light) 0%, #fef9f0 40%, var(--purple) 100%);
+      padding: 100px 24px 80px;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .hero-inner { max-width: 720px; margin: 0 auto; position: relative; z-index: 1; }
+    .hero h1 {
+      font-family: 'Baloo 2', cursive;
+      font-size: clamp(34px, 6vw, 52px);
+      font-weight: 800; color: var(--dark);
+      line-height: 1.15; margin-bottom: 20px;
+    }
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+      font-size: 18px; color: var(--text-light);
+      max-width: 540px; margin: 0 auto 32px;
+      font-weight: 600;
+    }
+    .hero-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .hero-float {
+      position: absolute; font-size: 80px; opacity: 0.07;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    /* ─── Buttons ─── */
+    .btn {
+      padding: 14px 32px; border-radius: 50px; border: none;
+      font-family: 'Nunito', sans-serif; font-size: 16px; font-weight: 800;
+      cursor: pointer; transition: all 0.3s; display: inline-block;
+    }
+    .btn-primary {
+      background: var(--accent); color: #fff;
+      box-shadow: 0 4px 16px rgba(255,140,66,0.3);
+    }
+    .btn-primary:hover { background: #e67a30; transform: translateY(-2px); }
+    .btn-outline {
+      background: transparent; color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+    .btn-outline:hover { background: var(--primary-light); }
+
+    /* ─── Cards ─── */
+    .card {
+      background: var(--white); border-radius: 18px;
+      padding: 32px 28px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+      transition: all 0.3s;
+    }
+    .card:hover { box-shadow: 0 12px 36px rgba(0,0,0,0.1); transform: translateY(-4px); }
+    .card-icon { font-size: 40px; margin-bottom: 14px; }
+    .card h3 { font-size: 17px; font-weight: 800; margin-bottom: 8px; color: var(--dark); }
+    .card p { font-size: 14px; color: var(--text-light); }
+
+    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 20px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+
+    /* ─── Timeline ─── */
+    .timeline { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; }
+    .timeline-item { flex: 1 1 170px; max-width: 195px; text-align: center; }
+    .timeline-circle {
+      width: 60px; height: 60px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; margin: 0 auto 14px;
+      box-shadow: 0 4px 16px rgba(74,144,217,0.25);
+    }
+    .timeline-step {
+      font-size: 12px; font-weight: 800; color: var(--accent);
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;
+    }
+    .timeline-item h4 { font-size: 15px; font-weight: 800; color: var(--dark); margin-bottom: 6px; }
+    .timeline-item p { font-size: 13px; color: var(--text-light); }
+
+    /* ─── Feature circles ─── */
+    .feature-circle {
+      width: 72px; height: 72px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 34px; margin: 0 auto 18px;
+    }
+
+    /* ─── Comparison Table ─── */
+    .comparison-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 14px; border-radius: 14px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+    .comparison-table th { padding: 14px 16px; font-weight: 800; font-size: 13px; background: var(--dark); color: #fff; text-align: left; border-right: 1px solid rgba(255,255,255,0.1); }
+    .comparison-table th:last-child { background: var(--primary); border-right: none; }
+    .comparison-table td { padding: 12px 16px; font-weight: 600; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); }
+    .comparison-table td:first-child { font-weight: 700; }
+    .comparison-table td:last-child { color: var(--primary); background: rgba(74,144,217,0.04); border-right: none; }
+    .comparison-table tr:nth-child(even) td { background: #f8fafc; }
+    .comparison-table tr:nth-child(even) td:last-child { background: rgba(74,144,217,0.06); }
+    .table-scroll { overflow-x: auto; }
+
+    /* ─── Personas ─── */
+    .persona { border-top: 4px solid; }
+    .persona-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .persona-header span { font-size: 40px; }
+    .persona-header h4 { font-size: 18px; font-weight: 800; color: var(--dark); }
+    .persona-header small { font-size: 13px; color: var(--text-light); font-weight: 600; }
+    .persona-label { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+    .persona-text { font-size: 14px; color: var(--text); line-height: 1.6; margin-bottom: 12px; }
+
+    /* ─── Pricing ─── */
+    .pricing-card { text-align: center; position: relative; }
+    .pricing-card.popular { border: 3px solid var(--accent); }
+    .pricing-badge {
+      position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+      background: var(--accent); color: #fff; font-size: 12px; font-weight: 800;
+      padding: 5px 20px; border-radius: 50px;
+      box-shadow: 0 3px 10px rgba(255,140,66,0.3);
+    }
+    .pricing-name { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+    .pricing-price { font-size: 38px; font-weight: 900; color: var(--dark); }
+    .pricing-period { font-size: 15px; color: var(--text-light); font-weight: 600; }
+    .pricing-features { margin: 20px 0 24px; }
+    .pricing-features p { font-size: 14px; color: var(--text); padding: 8px 0; border-bottom: 1px solid var(--border); font-weight: 600; }
+    .pricing-features p:last-child { border-bottom: none; }
+
+    /* ─── Chat ─── */
+    .chat-lang-toggle {
+      display: flex; background: var(--white); border-radius: 50px;
+      padding: 4px; box-shadow: 0 2px 12px rgba(74,144,217,0.12);
+      width: fit-content; margin: 0 auto 20px;
+    }
+    .chat-lang-btn {
+      padding: 10px 28px; border: none; border-radius: 50px;
+      cursor: pointer; font-family: 'Nunito', sans-serif;
+      font-size: 15px; font-weight: 700; transition: all 0.3s;
+    }
+    .chat-lang-btn.active {
+      background: linear-gradient(135deg, var(--primary), #5BA0E6);
+      color: #fff; box-shadow: 0 4px 14px rgba(74,144,217,0.35);
+    }
+    .chat-lang-btn:not(.active) { background: transparent; color: var(--text-light); }
+
+    .topic-chips { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 24px; }
+    .topic-chip {
+      padding: 12px 22px; border-radius: 20px; border: 2px solid transparent;
+      background: var(--white); cursor: pointer;
+      font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 700;
+      color: var(--text); box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+      transition: all 0.25s;
+    }
+    .topic-chip:hover { transform: translateY(-3px); border-color: var(--primary); box-shadow: 0 6px 20px rgba(74,144,217,0.2); }
+
+    .chat-window { max-width: 620px; margin: 0 auto; }
+    .chat-topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--white); border-radius: 16px 16px 0 0;
+      padding: 12px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+    }
+    .chat-topbar-left { display: flex; align-items: center; gap: 8px; }
+    .chat-topbar-left span:first-child { font-size: 22px; }
+    .chat-topbar-left span:last-child { font-weight: 700; color: var(--text); font-size: 15px; }
+    .chat-change-btn {
+      padding: 6px 16px; border-radius: 20px; border: none;
+      background: #f0f4f8; cursor: pointer;
+      font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700;
+      color: var(--text-light); transition: all 0.2s;
+    }
+    .chat-change-btn:hover { background: var(--accent); color: #fff; }
+
+    .chat-messages {
+      overflow-y: auto; background: #fafcfe; padding: 20px 16px;
+      display: flex; flex-direction: column; gap: 14px;
+      min-height: 350px; max-height: 55vh;
+      border-left: 1px solid var(--border); border-right: 1px solid var(--border);
+    }
+    .chat-msg { display: flex; }
+    .chat-msg.user { justify-content: flex-end; }
+    .chat-msg.ai { justify-content: flex-start; }
+    .chat-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), #5BA0E6);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; margin-right: 10px; flex-shrink: 0;
+    }
+    .chat-bubble {
+      max-width: 78%; padding: 14px 18px;
+      font-size: 15px; line-height: 1.55; font-weight: 600;
+      word-break: break-word;
+    }
+    .chat-bubble.ai {
+      border-radius: 20px 20px 20px 4px;
+      background: var(--white); color: var(--dark);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .chat-bubble.user {
+      border-radius: 20px 20px 4px 20px;
+      background: linear-gradient(135deg, var(--accent), #ffA266);
+      color: #fff; box-shadow: 0 4px 14px rgba(255,140,66,0.25);
+    }
+    .chat-typing { display: flex; gap: 6px; padding: 14px 22px; background: #fff; border-radius: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+    .chat-typing-dot {
+      width: 9px; height: 9px; border-radius: 50%;
+      background: var(--primary); opacity: 0.5;
+      animation: bounce 1.2s ease-in-out infinite;
+    }
+    .chat-typing-dot:nth-child(2) { animation-delay: 0.15s; }
+    .chat-typing-dot:nth-child(3) { animation-delay: 0.3s; }
+
+    .chat-input-area {
+      display: flex; gap: 10px; padding: 14px 16px;
+      background: var(--white); border-radius: 0 0 16px 16px;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.03);
+      border-top: 1px solid var(--border);
+    }
+    .chat-input {
+      flex: 1; padding: 14px 20px; border-radius: 50px;
+      border: 2px solid var(--border);
+      font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 600;
+      color: var(--dark); outline: none; background: #f8fafc;
+      transition: border-color 0.3s;
+    }
+    .chat-input:focus { border-color: var(--primary); }
+    .chat-send {
+      width: 50px; height: 50px; border-radius: 50%; border: none;
+      background: #e2e8f0; cursor: default;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; transition: all 0.3s; flex-shrink: 0;
+    }
+    .chat-send.active {
+      background: linear-gradient(135deg, var(--accent), #ffA266);
+      cursor: pointer; box-shadow: 0 4px 14px rgba(255,140,66,0.35);
+    }
+    .chat-send.active:hover { transform: scale(1.1); }
+
+    /* ─── Contact Form ─── */
+    .form-group { margin-bottom: 18px; }
+    .form-label {
+      display: block; font-size: 13px; font-weight: 800;
+      color: var(--text); margin-bottom: 6px;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .form-input, .form-select, .form-textarea {
+      width: 100%; padding: 14px 18px; border-radius: 12px;
+      border: 2px solid var(--border);
+      font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 600;
+      color: var(--dark); outline: none; background: #f8fafc;
+      transition: border-color 0.3s;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--primary); }
+    .form-textarea { min-height: 100px; resize: vertical; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .success-msg {
+      text-align: center; animation: fadeInUp 0.5s ease;
+    }
+    .success-msg .emoji { font-size: 64px; margin-bottom: 20px; }
+
+    /* ─── Blog ─── */
+    .blog-content { display: none; margin-top: 10px; }
+    .blog-content.open { display: block; }
+    .blog-toggle {
+      background: none; border: none; cursor: pointer;
+      font-family: 'Nunito', sans-serif; font-size: 14px;
+      font-weight: 800; color: var(--primary);
+    }
+
+    /* ─── Footer ─── */
+    .footer {
+      background: var(--dark); color: #a0b0c0;
+      padding: 48px 24px 28px; margin-top: 60px;
+    }
+    .footer-inner {
+      max-width: 1000px; margin: 0 auto;
+      display: flex; flex-wrap: wrap; gap: 40px;
+      justify-content: space-between;
+    }
+    .footer-logo {
+      font-family: 'Baloo 2', cursive; font-size: 26px;
+      font-weight: 800; color: #fff; margin-bottom: 10px;
+    }
+    .footer-links-title { font-weight: 800; color: #fff; margin-bottom: 12px; font-size: 15px; }
+    .footer-link {
+      display: block; cursor: pointer; font-size: 14px;
+      margin-bottom: 8px; transition: color 0.2s; color: #a0b0c0;
+      background: none; border: none; font-family: 'Nunito', sans-serif;
+      padding: 0; text-align: left;
+    }
+    .footer-link:hover { color: var(--accent); }
+    .footer-bottom {
+      text-align: center; margin-top: 36px; padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.1); font-size: 13px;
+    }
+
+    /* ─── Animations ─── */
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeInDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes bounce { 0%,80%,100% { transform: translateY(0); opacity: .4; } 40% { transform: translateY(-8px); opacity: 1; } }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+    .animate { animation: fadeInUp 0.5s ease both; }
+    .animate-d1 { animation-delay: 0.1s; }
+    .animate-d2 { animation-delay: 0.2s; }
+    .animate-d3 { animation-delay: 0.3s; }
+    .animate-d4 { animation-delay: 0.4s; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     HTML STRUKTURA — Ovo je "kostur" sajta.
+     Svaki <div> je kao kutija u koju stavljamo sadržaj.
+     ═══════════════════════════════════════════════ -->
+
+<!-- HEADER / NAVIGACIJA -->
+<header class="header" id="header">
+  <div class="header-inner">
+    <div class="logo" onclick="showPage('home')">KidsTalk</div>
+    <nav class="nav" id="desktopNav">
+      <button class="nav-link active" onclick="showPage('home')">Početna</button>
+      <button class="nav-link" onclick="showPage('about')">O nama</button>
+      <button class="nav-link" onclick="showPage('solution')">Naše rešenje</button>
+      <button class="nav-link" onclick="showPage('audience')">Ciljna grupa</button>
+      <button class="nav-link" onclick="showPage('pricing')">Paketi i cene</button>
+      <button class="nav-link" onclick="showPage('blog')">Blog</button>
+      <button class="nav-btn-ai" onclick="showPage('chatbot')">🤖 AI Drugar</button>
+      <button class="nav-btn-cta" onclick="showPage('contact')">Zakažite probni čas</button>
+    </nav>
+    <button class="hamburger" onclick="toggleMenu()">☰</button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <button onclick="showPage('home')">Početna</button>
+    <button onclick="showPage('about')">O nama</button>
+    <button onclick="showPage('solution')">Naše rešenje</button>
+    <button onclick="showPage('audience')">Ciljna grupa</button>
+    <button onclick="showPage('pricing')">Paketi i cene</button>
+    <button onclick="showPage('chatbot')">🤖 AI Drugar</button>
+    <button onclick="showPage('blog')">Blog</button>
+    <button onclick="showPage('contact')">Kontakt</button>
+  </div>
+</header>
+
+<!-- MAIN CONTENT -->
+<main style="padding-top: 70px;">
+
+<!-- ════════════ POČETNA STRANICA ════════════ -->
+<div class="page active" id="page-home">
+
+  <!-- Hero sekcija -->
+  <section class="hero">
+    <div class="hero-float" style="top:10%;left:5%">📚</div>
+    <div class="hero-float" style="bottom:10%;right:8%;animation-delay:1s;font-size:70px">🌍</div>
+    <div class="hero-inner">
+      <h1>Pametno učenje jezika <span>za vaše dete</span></h1>
+      <p>Individualni online časovi engleskog i nemačkog za decu od 7 do 14 godina, uz AI asistenta za vežbanje izgovora</p>
+      <div class="hero-btns">
+        <button class="btn btn-primary" onclick="showPage('contact')">Zakažite probni čas</button>
+        <button class="btn btn-outline" onclick="showPage('chatbot')">🤖 Probaj AI Drugara</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Problemi -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-title">
+        <h2>Zašto deca imaju problem sa stranim jezicima?</h2>
+        <p>Prepoznajete li ove situacije?</p>
+      </div>
+      <div class="grid-4">
+        <div class="card animate"><div class="card-icon">⏰</div><h3>Nedovoljno vremena za govor</h3><p>Nastava u školi ne ostavlja dovoljno prostora za individualni rad i vežbanje govora.</p></div>
+        <div class="card animate animate-d1"><div class="card-icon">😰</div><h3>Strah od greške</h3><p>Deca se stide da pričaju pred drugima i plaše se da će pogrešiti.</p></div>
+        <div class="card animate animate-d2"><div class="card-icon">❓</div><h3>Neizvesnost roditelja</h3><p>Roditelji ne znaju da li dete zaista napreduje ili uči napamet za ocenu.</p></div>
+        <div class="card animate animate-d3"><div class="card-icon">😴</div><h3>Dosadne metode</h3><p>Klasične metode učenja nisu dovoljno interaktivne niti motivišuće za decu.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Zašto KidsTalk -->
+  <section class="section" style="background: var(--primary-light)">
+    <div class="section-inner">
+      <div class="section-title"><h2>Po čemu smo drugačiji?</h2></div>
+      <div class="grid-3">
+        <div class="card animate" style="text-align:center">
+          <div class="feature-circle" style="background:linear-gradient(135deg,rgba(255,140,66,0.15),rgba(255,140,66,0.05))">👩‍🏫</div>
+          <h3 style="font-size:18px">Mladi profesori</h3>
+          <p>Dovoljno mladi da razumemo decu, dovoljno ozbiljni da budemo autoritet. Individualni pristup svakom detetu.</p>
+        </div>
+        <div class="card animate animate-d1" style="text-align:center">
+          <div class="feature-circle" style="background:linear-gradient(135deg,rgba(74,144,217,0.15),rgba(74,144,217,0.05))">🤖</div>
+          <h3 style="font-size:18px">AI drugar za vežbanje</h3>
+          <p>Između časova, dete može da vežba izgovor i konverzaciju sa AI chatbotom — bez straha, bez pritiska.</p>
+        </div>
+        <div class="card animate animate-d2" style="text-align:center">
+          <div class="feature-circle" style="background:linear-gradient(135deg,rgba(155,111,191,0.15),rgba(155,111,191,0.05))">📊</div>
+          <h3 style="font-size:18px">Redovni izveštaji</h3>
+          <p>Roditelji dobijaju kratke, konkretne izveštaje o napretku deteta nakon svake nedelje.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 koraka -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-title">
+        <h2>5 jednostavnih koraka</h2>
+        <p>Od prijave do rezultata — jednostavno i efikasno.</p>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item animate"><div class="timeline-circle">📝</div><div class="timeline-step">Korak 1</div><h4>Popunite formu</h4><p>Roditelj popuni kratku prijavu na sajtu.</p></div>
+        <div class="timeline-item animate animate-d1"><div class="timeline-circle">🎯</div><div class="timeline-step">Korak 2</div><h4>Probni čas</h4><p>Upoznajemo dete, testiramo znanje kroz igru.</p></div>
+        <div class="timeline-item animate animate-d2"><div class="timeline-circle">📋</div><div class="timeline-step">Korak 3</div><h4>Plan rada</h4><p>Pravimo personalizovan plan za dete.</p></div>
+        <div class="timeline-item animate animate-d3"><div class="timeline-circle">💻</div><div class="timeline-step">Korak 4</div><h4>Redovni časovi</h4><p>Online časovi 1-na-1, 2x nedeljno.</p></div>
+        <div class="timeline-item animate animate-d4"><div class="timeline-circle">📈</div><div class="timeline-step">Korak 5</div><h4>Praćenje napretka</h4><p>Nedeljni izveštaji + AI chatbot.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Za koga -->
+  <section class="section" style="background: linear-gradient(160deg, var(--accent-light), rgba(232,213,245,0.3))">
+    <div class="section-inner">
+      <div class="section-title"><h2>Za koga je KidsTalk?</h2></div>
+      <div class="grid-2">
+        <div class="card"><div style="font-size:44px;margin-bottom:12px">👧👦</div><h3 style="font-size:20px">Za decu</h3><p style="font-size:15px">Deca od 7 do 14 godina kojima treba pomoć sa engleskim ili nemačkim. Posebno ona koja se stide da govore i kojima fali individualna pažnja.</p></div>
+        <div class="card"><div style="font-size:44px;margin-bottom:12px">👨‍👩‍👧</div><h3 style="font-size:20px">Za roditelje</h3><p style="font-size:15px">Roditelji koji žele da njihovo dete stekne praktično znanje jezika, a ne da uči napamet. Koji cene transparentnost i žele da prate napredak.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section" style="text-align:center">
+    <div class="section-inner">
+      <div style="font-size:48px;margin-bottom:16px">🚀</div>
+      <h2 style="font-family:'Baloo 2',cursive;font-size:clamp(26px,4vw,38px);font-weight:800;color:var(--dark);margin-bottom:16px">Spremni da započnete?</h2>
+      <p style="color:var(--text-light);font-size:17px;margin-bottom:28px;font-weight:600">Zakažite besplatan probni čas i uverite se sami.</p>
+      <button class="btn btn-primary" onclick="showPage('contact')">Zakažite besplatan probni čas</button>
+    </div>
+  </section>
+</div>
+
+<!-- ════════════ O NAMA ════════════ -->
+<div class="page" id="page-about">
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-title"><h2>O nama</h2><p>Upoznajte tim koji stoji iza KidsTalk-a.</p></div>
+      <div class="grid-2" style="margin-bottom:56px">
+        <div class="card animate" style="text-align:center">
+          <div style="width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,var(--primary),rgba(74,144,217,0.6));display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:800;color:#fff;margin:0 auto 18px;box-shadow:0 6px 20px rgba(74,144,217,0.3)">MS</div>
+          <h3 style="font-size:20px;color:var(--dark)">Marija Stanojević</h3>
+          <p style="font-size:14px;font-weight:700;color:var(--primary);margin-bottom:12px">Profesorka engleskog i nemačkog jezika</p>
+          <p>Studentkinja koja veruje da učenje jezika treba da bude zabavno i prilagođeno svakom detetu. Sa strašću za rad sa decom i iskustvom u podučavanju.</p>
+        </div>
+        <div class="card animate animate-d1" style="text-align:center">
+          <div style="width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,var(--accent),rgba(255,140,66,0.6));display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:800;color:#fff;margin:0 auto 18px;box-shadow:0 6px 20px rgba(255,140,66,0.3)">AP</div>
+          <h3 style="font-size:20px;color:var(--dark)">Anđela Petrović</h3>
+          <p style="font-size:14px;font-weight:700;color:var(--accent);margin-bottom:12px">Profesorka engleskog i nemačkog jezika</p>
+          <p>Posvećena studentkinja sa ljubavlju prema jezicima i radu sa decom. Veruje da svako dete može da zavoli strani jezik uz pravi pristup.</p>
+        </div>
+      </div>
+      <div class="card" style="text-align:center;max-width:680px;margin:0 auto;background:linear-gradient(135deg,var(--primary-light),rgba(232,213,245,0.3))">
+        <h3 style="font-family:'Baloo 2',cursive;font-size:22px;font-weight:800;color:var(--dark);margin-bottom:14px">Naša misija</h3>
+        <p style="font-size:15px;color:var(--text);line-height:1.7">Verujemo da svako dete zaslužuje priliku da nauči strani jezik na način koji mu odgovara — bez straha, bez pritiska, uz podršku mladih profesora koji razumeju njihov svet. KidsTalk kombinuje individualni pristup sa modernom AI tehnologijom kako bi deca stekla samopouzdanje u govoru i stvarno znanje jezika.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ════════════ NAŠE REŠENJE ════════════ -->
+<div class="page" id="page-solution">
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-title"><h2>Naše rešenje</h2><p>Šta KidsTalk nudi deci i roditeljima.</p></div>
+      <div class="grid-2" style="margin-bottom:56px">
+        <div class="card" style="border-top:4px solid var(--primary)">
+          <div style="font-size:36px;margin-bottom:12px">👧👦</div>
+          <h3 style="font-size:20px">Za decu</h3>
+          <p style="margin-top:10px">✅ Zabavno i interaktivno učenje sa mladim profesorom</p>
+          <p style="margin-top:8px">✅ AI pametni drugar za vežbanje govora bez straha</p>
+          <p style="margin-top:8px">✅ Personalizovan plan prilagođen tempu deteta</p>
+        </div>
+        <div class="card" style="border-top:4px solid var(--accent)">
+          <div style="font-size:36px;margin-bottom:12px">👨‍👩‍👧</div>
+          <h3 style="font-size:20px">Za roditelje</h3>
+          <p style="margin-top:10px">✅ Jasna struktura rada i dogovoreni ciljevi</p>
+          <p style="margin-top:8px">✅ Redovni izveštaji o napretku deteta</p>
+          <p style="margin-top:8px">✅ Brzi odgovori na pitanja putem sajta</p>
+          <p style="margin-top:8px">✅ Sigurnost da dete koristi jezik u praksi</p>
+        </div>
+      </div>
+
+      <h3 style="font-family:'Baloo 2',cursive;font-size:24px;font-weight:800;text-align:center;margin-bottom:24px;color:var(--dark)">Poređenje sa alternativama</h3>
+      <div class="table-scroll">
+        <table class="comparison-table">
+          <thead><tr><th>Kriterijum</th><th>Klasična škola</th><th>Privatni profesor</th><th>Aplikacije</th><th>KidsTalk</th></tr></thead>
+          <tbody>
+            <tr><td>Individualni pristup</td><td>❌ Grupni rad</td><td>✅ Da</td><td>❌ Ne</td><td>✅ Da, 1 na 1</td></tr>
+            <tr><td>AI vežbanje govora</td><td>❌ Ne</td><td>❌ Ne</td><td>⚠️ Delimično</td><td>✅ AI chatbot</td></tr>
+            <tr><td>Fleksibilni termini</td><td>❌ Fiksni</td><td>✅ Dogovor</td><td>✅ Uvek</td><td>✅ Online, po dogovoru</td></tr>
+            <tr><td>Praćenje napretka</td><td>⚠️ Retko</td><td>⚠️ Zavisi</td><td>❌ Automatski</td><td>✅ Nedeljni izveštaji</td></tr>
+            <tr><td>Bliskost sa decom</td><td>❌ Formalno</td><td>⚠️ Zavisi</td><td>❌ Nema</td><td>✅ Mladi profesori</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ════════════ CILJNA GRUPA ════════════ -->
+<div class="page" id="page-audience">
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-title"><h2>Ciljna grupa</h2><p>KidsTalk je ciljano usmeren ka precizno definisanim korisničkim segmentima.</p></div>
+
+      <div class="grid-2" style="margin-bottom:56px">
+        <div class="card" style="border-left:4px solid var(--primary)">
+          <h3 style="font-size:18px;color:var(--primary)">🎯 Primarni korisnici — Deca (7–14 godina)</h3>
+          <p style="margin-top:10px">Deca koja idu u osnovnu školu i uče engleski ili nemački. Imaju osnovu iz škole, ali im nedostaje sigurnost u govoru, individualna pažnja i motivacija.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--accent)">
+          <h3 style="font-size:18px;color:var(--accent)">🎯 Sekundarni korisnici — Roditelji</h3>
+          <p style="margin-top:10px">Donose odluku o kupovini, finansiraju časove. Traže pouzdanost, strukturu i vidljiv napredak. Važna im je transparentnost i redovna komunikacija.</p>
+        </div>
+      </div>
+
+      <h3 style="font-family:'Baloo 2',cursive;font-size:24px;font-weight:800;text-align:center;margin-bottom:28px;color:var(--dark)">User Persone</h3>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px">
+        <!-- Mila -->
+        <div class="card persona animate" style="background:linear-gradient(135deg,var(--primary-light),#dbeafe);border-color:var(--primary)">
+          <div class="persona-header"><span>👧</span><div><h4>Mila, 10 godina</h4><small>Beograd, 4. razred</small></div></div>
+          <p class="persona-label" style="color:var(--primary)">😟 Problem</p>
+          <p class="persona-text">Razume gradivo iz škole, ali se stidi da govori engleski pred drugom decom jer se plaši greške. Časovi u školi su joj dosadni.</p>
+          <p class="persona-label" style="color:var(--primary)">💡 Šta želi</p>
+          <p class="persona-text">Sigurno okruženje za vežbanje govora. Zabavniji pristup učenju.</p>
+          <p class="persona-label" style="color:var(--primary)">✅ KidsTalk rešenje</p>
+          <p class="persona-text">Individualni časovi sa mladom profesorkom i AI drugar za vežbanje izgovora između časova.</p>
+        </div>
+        <!-- Jelena -->
+        <div class="card persona animate animate-d1" style="background:linear-gradient(135deg,rgba(232,213,245,0.4),#f3e8fa);border-color:var(--purple-deep)">
+          <div class="persona-header"><span>👩</span><div><h4>Jelena, 38 godina</h4><small>Beograd, Milina mama</small></div></div>
+          <p class="persona-label" style="color:var(--purple-deep)">😟 Problem</p>
+          <p class="persona-text">Nema dovoljno vremena da pomogne Mili oko engleskog. Ne može da je vozi na časove. Ne zna da li dete napreduje.</p>
+          <p class="persona-label" style="color:var(--purple-deep)">💡 Šta želi</p>
+          <p class="persona-text">Online format. Jasne povratne informacije o napretku.</p>
+          <p class="persona-label" style="color:var(--purple-deep)">✅ KidsTalk rešenje</p>
+          <p class="persona-text">Bez vožnje, jasna struktura rada, nedeljni izveštaji o napretku.</p>
+        </div>
+        <!-- Lazar -->
+        <div class="card persona animate animate-d2" style="background:linear-gradient(135deg,var(--green),#d4edda);border-color:var(--green-deep)">
+          <div class="persona-header"><span>👦</span><div><h4>Lazar, 12 godina</h4><small>Novi Sad, 6. razred</small></div></div>
+          <p class="persona-label" style="color:var(--green-deep)">😟 Problem</p>
+          <p class="persona-text">Uči nemački koji mu je izazov. Niko u okruženju ne priča nemački. Klasičan pristup mu je dosadan.</p>
+          <p class="persona-label" style="color:var(--green-deep)">💡 Šta želi</p>
+          <p class="persona-text">Da razume filmove i igrice na nemačkom. Personalizovani pristup.</p>
+          <p class="persona-label" style="color:var(--green-deep)">✅ KidsTalk rešenje</p>
+          <p class="persona-text">Personalizovani plan učenja, zabavniji pristup i AI alat za samostalno vežbanje.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ════════════ PAKETI I CENE ════════════ -->
+<div class="page" id="page-pricing">
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-title"><h2>Paketi i cene</h2><p>Svi paketi uključuju individualne online časove i pristup AI chatbotu.</p></div>
+      <div class="grid-3" style="margin-bottom:40px">
+        <div class="card pricing-card animate">
+          <h3 class="pricing-name" style="color:var(--primary)">Starter</h3>
+          <div><span class="pricing-price">4.000</span> <span class="pricing-period">RSD / mesečno</span></div>
+          <div class="pricing-features">
+            <p>✅ 4 časa mesečno (1x nedeljno, 45 min)</p>
+            <p>✅ Pristup AI chatbotu</p>
+            <p>✅ Mesečni izveštaj o napretku</p>
+          </div>
+          <button class="btn btn-outline" style="width:100%" onclick="showPage('contact')">Izaberite Starter</button>
+        </div>
+        <div class="card pricing-card popular animate animate-d1">
+          <div class="pricing-badge">⭐ Najpopularniji</div>
+          <h3 class="pricing-name" style="color:var(--accent);margin-top:10px">Standard</h3>
+          <div><span class="pricing-price">7.000</span> <span class="pricing-period">RSD / mesečno</span></div>
+          <div class="pricing-features">
+            <p>✅ 8 časova mesečno (2x nedeljno, 45 min)</p>
+            <p>✅ Pristup AI chatbotu</p>
+            <p>✅ Nedeljni izveštaji o napretku</p>
+            <p>✅ Personalizovan plan učenja</p>
+          </div>
+          <button class="btn btn-primary" style="width:100%" onclick="showPage('contact')">Izaberite Standard</button>
+        </div>
+        <div class="card pricing-card animate animate-d2">
+          <h3 class="pricing-name" style="color:var(--purple-deep)">Premium</h3>
+          <div><span class="pricing-price">10.000</span> <span class="pricing-period">RSD / mesečno</span></div>
+          <div class="pricing-features">
+            <p>✅ 12 časova mesečno (3x nedeljno, 45 min)</p>
+            <p>✅ Pristup AI chatbotu</p>
+            <p>✅ Nedeljni izveštaji o napretku</p>
+            <p>✅ Personalizovan plan učenja</p>
+            <p>✅ Tematske radionice</p>
+          </div>
+          <button class="btn btn-outline" style="width:100%;color:var(--purple-deep);border-color:var(--purple-deep)" onclick="showPage('contact')">Izaberite Premium</button>
+        </div>
+      </div>
+      <div style="text-align:center">
+        <div class="card" style="display:inline-block;max-width:500px;background:linear-gradient(135deg,#FFF3CD,var(--accent-light))">
+          <p style="font-size:15px;font-weight:700;color:var(--dark);margin-bottom:6px">💰 Pojedinačni čas: <strong>2.000 RSD</strong> (45 min)</p>
+          <p style="font-size:13px;color:var(--text-light)">Svi paketi uključuju besplatan probni čas. Možete otkazati u svakom trenutku.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ════════════ AI DRUGAR (CHATBOT) ════════════ -->
+<div class="page" id="page-chatbot">
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-title">
+        <h2 style="background:linear-gradient(135deg,var(--primary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent">🤖 AI Drugar</h2>
+        <p id="chatSubtitle">Practice English with your AI buddy!</p>
+      </div>
+
+      <div class="chat-lang-toggle">
+        <button class="chat-lang-btn active" id="langEn" onclick="setLang('en')">🇬🇧 English</button>
+        <button class="chat-lang-btn" id="langDe" onclick="setLang('de')">🇩🇪 Deutsch</button>
+      </div>
+
+      <!-- Topic selection -->
+      <div id="topicSelection" class="topic-chips"></div>
+
+      <!-- Welcome -->
+      <div id="chatWelcome" style="text-align:center;max-width:480px;margin:24px auto 0">
+        <div class="card" style="box-shadow:0 4px 20px rgba(0,0,0,0.05)">
+          <div style="font-size:48px;margin-bottom:12px">🤖💬</div>
+          <p id="welcomeText" style="font-size:16px;line-height:1.65;font-weight:600"></p>
+        </div>
+      </div>
+
+      <!-- Chat window (hidden until topic selected) -->
+      <div id="chatContainer" class="chat-window" style="display:none">
+        <div class="chat-topbar">
+          <div class="chat-topbar-left"><span id="chatTopicEmoji"></span><span id="chatTopicName"></span></div>
+          <button class="chat-change-btn" onclick="resetChat()" id="changeTopic">Change topic</button>
+        </div>
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-input-area">
+          <input class="chat-input" id="chatInput" type="text" placeholder="Type your message... ✍️" onkeydown="if(event.key==='Enter')sendMessage()">
+          <button class="chat-send" id="chatSend" onclick="sendMessage()">🚀</button>
+        </div>
+      </div>
+
+      <!-- How it works -->
+      <div id="chatHowTo" style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:36px;max-width:600px;margin-left:auto;margin-right:auto">
+        <div class="card" style="flex:1 1 160px;text-align:center"><div style="font-size:34px;margin-bottom:8px">🎯</div><div style="font-weight:800;font-size:14px" id="step1Title">Pick a topic</div><div style="color:var(--text-light);font-size:13px" id="step1Desc">Choose what you want to talk about</div></div>
+        <div class="card" style="flex:1 1 160px;text-align:center"><div style="font-size:34px;margin-bottom:8px">✍️</div><div style="font-weight:800;font-size:14px" id="step2Title">Practice</div><div style="color:var(--text-light);font-size:13px" id="step2Desc">Write messages, AI buddy will help</div></div>
+        <div class="card" style="flex:1 1 160px;text-align:center"><div style="font-size:34px;margin-bottom:8px">🌟</div><div style="font-weight:800;font-size:14px" id="step3Title">Learn without fear</div><div style="color:var(--text-light);font-size:13px" id="step3Desc">No grades, no stress — just practice!</div></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ════════════ BLOG ════════════ -->
+<div class="page" id="page-blog">
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-title"><h2>Blog — Saveti za roditelje</h2><p>Korisni tekstovi o učenju jezika, motivaciji dece i ulozi AI-a u obrazovanju.</p></div>
+      <div class="grid-2">
+        <div class="card animate">
+          <div style="font-size:42px;margin-bottom:14px">🧒🌍</div>
+          <h3 style="font-size:19px">Zašto je rano učenje jezika važno?</h3>
+          <p style="margin:10px 0">Istraživanja pokazuju da deca koja počnu da uče strani jezik u ranom uzrastu lakše usvajaju izgovor i gramatiku.</p>
+          <div class="blog-content" id="blog1">
+            <p style="margin-bottom:10px">Rano učenje stranih jezika ima brojne prednosti za razvoj deteta. Deca uzrasta od 7 do 14 godina su u idealnom periodu za usvajanje novog jezika jer je njihov mozak još uvek izuzetno prilagodljiv. Studije pokazuju da deca koja počnu da uče jezik pre puberteta imaju bolji izgovor i prirodniji osećaj za gramatiku.</p>
+            <p>Ali ključ uspeha nije samo rani početak — već i način učenja. Deca najbolje uče kroz interakciju, igru i stvarne situacije, a ne kroz suvo memorisanje pravila. Zato je važno izabrati metod koji kombinuje strukturu sa zabavom, kao što to radi KidsTalk.</p>
+          </div>
+          <button class="blog-toggle" onclick="toggleBlog('blog1', this)">Pročitajte više →</button>
+        </div>
+        <div class="card animate animate-d1">
+          <div style="font-size:42px;margin-bottom:14px">🤖🗣️</div>
+          <h3 style="font-size:19px">Kako AI pomaže deci da savladaju izgovor</h3>
+          <p style="margin:10px 0">AI tehnologija može biti sjajan alat za vežbanje izgovora — bez stresa i sa beskonačnim strpljenjem.</p>
+          <div class="blog-content" id="blog2">
+            <p style="margin-bottom:10px">Jedan od najvećih izazova u učenju stranog jezika je izgovor. Deca se često stide da govore pred drugima, a u grupnim časovima retko imaju priliku za individualno vežbanje.</p>
+            <p>Tu na scenu stupa AI chatbot. KidsTalk AI drugar je dizajniran da bude strpljiv sagovornik koji nikada ne osuđuje. Dete može hiljadu puta da ponovi istu reč, i chatbot će svaki put dati povratnu informaciju. Ovo je posebno korisno za decu koja su tiha na časovima — sa AI drugarom, mogu da vežbaju u svom tempu, bez pritiska.</p>
+          </div>
+          <button class="blog-toggle" onclick="toggleBlog('blog2', this)">Pročitajte više →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ════════════ KONTAKT ════════════ -->
+<div class="page" id="page-contact">
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-title"><h2>Zakažite probni čas</h2><p>Popunite formu i javićemo vam se u roku od 24 sata.</p></div>
+
+      <div id="contactForm" class="grid-2" style="max-width:900px;margin:0 auto">
+        <div class="card">
+          <div class="form-group"><label class="form-label">Ime roditelja *</label><input class="form-input" id="f-parent" placeholder="Vaše ime i prezime"></div>
+          <div class="form-group"><label class="form-label">Email adresa *</label><input class="form-input" id="f-email" type="email" placeholder="vas@email.com"></div>
+          <div class="form-group"><label class="form-label">Broj telefona</label><input class="form-input" id="f-phone" type="tel" placeholder="+381 6x xxx xxxx"></div>
+          <div class="form-group"><label class="form-label">Ime deteta *</label><input class="form-input" id="f-child" placeholder="Ime vašeg deteta"></div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Uzrast deteta *</label><select class="form-select" id="f-age"><option value="">Izaberite</option><option>7 godina</option><option>8 godina</option><option>9 godina</option><option>10 godina</option><option>11 godina</option><option>12 godina</option><option>13 godina</option><option>14 godina</option></select></div>
+            <div class="form-group"><label class="form-label">Jezik *</label><select class="form-select" id="f-lang"><option value="">Izaberite</option><option>Engleski</option><option>Nemački</option></select></div>
+          </div>
+          <div class="form-group"><label class="form-label">Poruka / Napomena</label><textarea class="form-textarea" id="f-msg" placeholder="Opišite sa čim se vaše dete suočava u učenju jezika..."></textarea></div>
+          <button class="btn btn-primary" style="width:100%" onclick="submitForm()">Pošaljite prijavu</button>
+        </div>
+        <div>
+          <div class="card" style="margin-bottom:20px;background:linear-gradient(135deg,var(--primary-light),rgba(232,213,245,0.3))">
+            <h3 style="font-size:18px;font-weight:800;color:var(--dark);margin-bottom:16px">📞 Kontakt informacije</h3>
+            <p style="font-size:15px;margin-bottom:12px;font-weight:600">📧 kidstalk.info(at)gmail.com</p>
+            <p style="font-size:15px;margin-bottom:12px;font-weight:600">📱 @kidstalk_rs</p>
+            <p style="font-size:15px;font-weight:600">🕐 Pon–Pet, 15:00 – 20:00</p>
+          </div>
+          <div class="card" style="background:#FFF3CD">
+            <h3 style="font-size:18px;font-weight:800;color:var(--dark);margin-bottom:10px">🎁 Probni čas je besplatan!</h3>
+            <p style="font-size:14px;color:var(--text);line-height:1.65">Na probnom času upoznajemo vaše dete, testiramo znanje kroz igru i razgovor, i zajedno pravimo plan za dalji rad. Bez obaveza.</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="contactSuccess" class="success-msg" style="display:none">
+        <div class="emoji">🎉</div>
+        <h2 style="font-family:'Baloo 2',cursive;font-size:32px;font-weight:800;color:var(--dark);margin-bottom:14px">Hvala na prijavi!</h2>
+        <p style="font-size:17px;color:var(--text-light);font-weight:600;max-width:440px;margin:0 auto">Javićemo vam se uskoro da zakažemo probni čas za vaše dete. Jedva čekamo da se upoznamo! 😊</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">KidsTalk</div>
+      <p style="font-size:14px;max-width:280px;line-height:1.6">Online časovi engleskog i nemačkog za decu od 7 do 14 godina, uz AI asistenta za vežbanje izgovora.</p>
+    </div>
+    <div>
+      <div class="footer-links-title">Stranice</div>
+      <button class="footer-link" onclick="showPage('home')">Početna</button>
+      <button class="footer-link" onclick="showPage('about')">O nama</button>
+      <button class="footer-link" onclick="showPage('audience')">Ciljna grupa</button>
+      <button class="footer-link" onclick="showPage('pricing')">Paketi i cene</button>
+      <button class="footer-link" onclick="showPage('chatbot')">AI Drugar</button>
+      <button class="footer-link" onclick="showPage('contact')">Kontakt</button>
+    </div>
+    <div>
+      <div class="footer-links-title">Kontakt</div>
+      <p style="font-size:14px;margin-bottom:6px">📧 kidstalk.info(at)gmail.com</p>
+      <p style="font-size:14px;margin-bottom:6px">📱 Instagram: @kidstalk_rs</p>
+      <p style="font-size:14px">🕐 Pon–Pet, 15:00 – 20:00</p>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2025 KidsTalk. Sva prava zadržana.</div>
+</footer>
+
+<!-- ═══════════════════════════════════════════════
+     JAVASCRIPT — Ovo je "ponašanje" sajta.
+     Šta se desi kad klikneš dugme, kako chat radi.
+     ═══════════════════════════════════════════════ -->
+<script>
+// ─── NAVIGACIJA ───
+// Ovo kontroliše koja stranica se prikazuje
+function showPage(pageId) {
+  // Sakrij sve stranice
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  // Prikaži traženu stranicu
+  document.getElementById('page-' + pageId).classList.add('active');
+  // Ažuriraj aktivni link u meniju
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  // Skroluj na vrh
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Zatvori mobilni meni
+  document.getElementById('mobileMenu').classList.remove('open');
+}
+
+// Hamburger meni za mobilne telefone
+function toggleMenu() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+
+// Header shadow na scroll
+window.addEventListener('scroll', function() {
+  document.getElementById('header').classList.toggle('scrolled', window.scrollY > 20);
+});
+
+// ─── BLOG ───
+function toggleBlog(id, btn) {
+  var el = document.getElementById(id);
+  el.classList.toggle('open');
+  btn.textContent = el.classList.contains('open') ? 'Zatvori ↑' : 'Pročitajte više →';
+}
+
+// ─── KONTAKT FORMA ───
+function submitForm() {
+  var parent = document.getElementById('f-parent').value;
+  var email = document.getElementById('f-email').value;
+  var child = document.getElementById('f-child').value;
+  var age = document.getElementById('f-age').value;
+  var lang = document.getElementById('f-lang').value;
+
+  if (!parent || !email || !child || !age || !lang) {
+    alert('Molimo popunite sva obavezna polja.');
+    return;
+  }
+  document.getElementById('contactForm').style.display = 'none';
+  document.getElementById('contactSuccess').style.display = 'block';
+}
+
+// ─── AI CHATBOT ───
+// Ovo je najvažniji deo — kako chatbot komunicira sa Claude API-jem
+
+var chatLang = 'en';      // Trenutno izabrani jezik
+var chatTopic = null;     // Trenutno izabrana tema
+var chatMessages = [];    // Istorija poruka u razgovoru
+var isLoading = false;    // Da li čekamo odgovor od AI-ja
+
+// Teme za razgovor
+var topics = [
+  { id: 'school', emoji: '🏫', en: 'At School', de: 'In der Schule' },
+  { id: 'shop', emoji: '🛒', en: 'At the Store', de: 'Im Geschäft' },
+  { id: 'travel', emoji: '✈️', en: 'Traveling', de: 'Auf Reisen' },
+  { id: 'intro', emoji: '👋', en: 'Introducing Yourself', de: 'Sich vorstellen' },
+  { id: 'family', emoji: '👨‍👩‍👧‍👦', en: 'Family & Friends', de: 'Familie & Freunde' },
+  { id: 'free', emoji: '💬', en: 'Free Topic', de: 'Freies Thema' }
+];
+
+/*
+  System prompt — ovo su UPUTSTVA za AI.
+  Kažemo AI-ju kako da se ponaša: da bude prijateljski,
+  da govori jednostavno, da ispravlja greške pozitivno,
+  da ne odgovara na neprikladna pitanja.
+*/
+function getSystemPrompt(lang, topicName) {
+  if (lang === 'en') {
+    return 'You are KidsTalk Buddy, a friendly AI language partner for children aged 7-14 learning English. Rules: Speak simple English (A1-B1). Keep responses to 1-3 sentences. Be warm and encouraging, use emojis occasionally. If the child makes a mistake, correct gently: "Great try! The correct way is: \'...\'. You\'re doing awesome!" If they write in Serbian, respond in English and encourage them. Stay on topic: "' + topicName + '". NEVER discuss anything inappropriate. End each response with a follow-up question. Start by greeting the child and asking about "' + topicName + '".';
+  } else {
+    return 'Du bist KidsTalk Buddy, ein freundlicher KI-Sprachpartner fuer Kinder (7-14 Jahre), die Deutsch lernen. Regeln: Einfaches Deutsch (A1-B1). Kurze Antworten (1-3 Saetze). Warm und ermutigend, gelegentlich Emojis. Fehler sanft korrigieren. Beim Thema "' + topicName + '" bleiben. NIEMALS Unangemessenes. Am Ende jeder Antwort eine Folgefrage. Beginne mit Begruessung und Frage zum Thema "' + topicName + '".';
+  }
+}
+
+// Inicijalizacija teme - prikazuje dugmiće za teme
+function renderTopics() {
+  var container = document.getElementById('topicSelection');
+  container.innerHTML = '';
+  topics.forEach(function(t) {
+    var btn = document.createElement('button');
+    btn.className = 'topic-chip';
+    btn.innerHTML = '<span style="font-size:18px;margin-right:6px">' + t.emoji + '</span>' + t[chatLang];
+    btn.onclick = function() { startChat(t); };
+    container.appendChild(btn);
+  });
+}
+
+// Promena jezika
+function setLang(lang) {
+  chatLang = lang;
+  document.getElementById('langEn').className = 'chat-lang-btn' + (lang === 'en' ? ' active' : '');
+  document.getElementById('langDe').className = 'chat-lang-btn' + (lang === 'de' ? ' active' : '');
+  document.getElementById('chatSubtitle').textContent = lang === 'en' ? 'Practice English with your AI buddy!' : 'Uebe Deutsch mit deinem KI-Freund!';
+  document.getElementById('welcomeText').textContent = lang === 'en'
+    ? "Hi there! I'm your KidsTalk Buddy! Pick a topic above and let's practice English together. Don't worry - there are no wrong answers here!"
+    : "Hallo! Ich bin dein KidsTalk Buddy! Waehle oben ein Thema und lass uns zusammen Deutsch ueben. Keine Sorge - hier gibt es keine falschen Antworten!";
+  document.getElementById('changeTopic').textContent = lang === 'en' ? 'Change topic' : 'Thema aendern';
+  document.getElementById('chatInput').placeholder = lang === 'en' ? 'Type your message...' : 'Schreibe deine Nachricht...';
+  document.getElementById('step1Title').textContent = lang === 'en' ? 'Pick a topic' : 'Waehle ein Thema';
+  document.getElementById('step1Desc').textContent = lang === 'en' ? 'Choose what you want to talk about' : 'Waehle, worüber du sprechen moechtest';
+  document.getElementById('step2Title').textContent = lang === 'en' ? 'Practice' : 'Uebe';
+  document.getElementById('step2Desc').textContent = lang === 'en' ? 'Write messages, AI buddy will help' : 'Schreibe Nachrichten, KI-Freund hilft';
+  document.getElementById('step3Title').textContent = lang === 'en' ? 'Learn without fear' : 'Lerne ohne Angst';
+  document.getElementById('step3Desc').textContent = lang === 'en' ? 'No grades, no stress - just practice!' : 'Keine Noten, kein Stress!';
+  renderTopics();
+  resetChat();
+}
+
+// Započni chat sa izabranom temom
+function startChat(topic) {
+  chatTopic = topic;
+  chatMessages = [];
+  document.getElementById('topicSelection').style.display = 'none';
+  document.getElementById('chatWelcome').style.display = 'none';
+  document.getElementById('chatHowTo').style.display = 'none';
+  document.getElementById('chatContainer').style.display = 'block';
+  document.getElementById('chatTopicEmoji').textContent = topic.emoji;
+  document.getElementById('chatTopicName').textContent = topic[chatLang];
+  document.getElementById('chatMessages').innerHTML = '';
+
+  // Pošalji prvi zahtev ka AI-ju da započne razgovor
+  callAI([{ role: 'user', content: 'Start the conversation.' }], true);
+}
+
+// Reset chat
+function resetChat() {
+  chatTopic = null;
+  chatMessages = [];
+  document.getElementById('topicSelection').style.display = 'flex';
+  document.getElementById('chatWelcome').style.display = 'block';
+  document.getElementById('chatHowTo').style.display = 'flex';
+  document.getElementById('chatContainer').style.display = 'none';
+}
+
+// Pošalji poruku
+function sendMessage() {
+  var input = document.getElementById('chatInput');
+  var text = input.value.trim();
+  if (!text || isLoading) return;
+
+  input.value = '';
+  addMessage('user', text);
+  chatMessages.push({ role: 'user', content: text });
+
+  var apiMessages = chatMessages.map(function(m) {
+    return { role: m.role, content: m.content };
+  });
+
+  callAI(apiMessages, false);
+}
+
+/*
+  Ovo je KLJUČNA FUNKCIJA — poziva Claude API.
+
+  Kako radi:
+  1. Šaljemo HTTP POST zahtev ka api.anthropic.com
+  2. U zahtevu šaljemo:
+     - model: koji AI model koristimo (claude-sonnet)
+     - system: uputstva za AI (system prompt)
+     - messages: istorija razgovora
+  3. API vraća odgovor sa tekstom koji AI generisao
+  4. Mi taj tekst prikazujemo u chat prozoru
+*/
+function callAI(messages, isFirst) {
+  isLoading = true;
+  updateSendBtn();
+  showTyping();
+
+  var topicName = chatTopic[chatLang];
+  var systemPrompt = getSystemPrompt(chatLang, topicName);
+
+  // fetch() je JavaScript funkcija za slanje HTTP zahteva
+  fetch('/.netlify/functions/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      system: systemPrompt,
+      messages: messages
+    })
+  })
+  .then(function(response) { return response.json(); })
+  .then(function(data) {
+    hideTyping();
+    var aiText = '';
+    if (data.content) {
+      data.content.forEach(function(block) {
+        if (block.text) aiText += block.text;
+      });
+    }
+    if (!aiText) aiText = chatLang === 'en' ? "Hi! Let's practice together!" : "Hallo! Lass uns zusammen ueben!";
+
+    if (!isFirst) {
+      chatMessages.push({ role: 'assistant', content: aiText });
+    } else {
+      chatMessages = [{ role: 'assistant', content: aiText }];
+    }
+    addMessage('assistant', aiText);
+    isLoading = false;
+    updateSendBtn();
+    document.getElementById('chatInput').focus();
+  })
+  .catch(function() {
+    hideTyping();
+    var fallback = chatLang === 'en' ? "Oops! Something went wrong. Try again?" : "Ups! Etwas ist schiefgegangen. Versuch es nochmal?";
+    addMessage('assistant', fallback);
+    isLoading = false;
+    updateSendBtn();
+  });
+}
+
+// Dodaj poruku u chat prozor
+function addMessage(role, text) {
+  var container = document.getElementById('chatMessages');
+  var div = document.createElement('div');
+  div.className = 'chat-msg ' + role;
+
+  var html = '';
+  if (role === 'assistant') {
+    html += '<div class="chat-avatar">🤖</div>';
+  }
+  html += '<div class="chat-bubble ' + role + '">' + escapeHtml(text) + '</div>';
+  div.innerHTML = html;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+// Prikaži typing indikator
+function showTyping() {
+  var container = document.getElementById('chatMessages');
+  var div = document.createElement('div');
+  div.className = 'chat-msg ai';
+  div.id = 'typingIndicator';
+  div.innerHTML = '<div class="chat-avatar">🤖</div><div class="chat-typing"><div class="chat-typing-dot"></div><div class="chat-typing-dot"></div><div class="chat-typing-dot"></div></div>';
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function hideTyping() {
+  var el = document.getElementById('typingIndicator');
+  if (el) el.remove();
+}
+
+function updateSendBtn() {
+  var input = document.getElementById('chatInput');
+  var btn = document.getElementById('chatSend');
+  btn.className = 'chat-send' + (input.value.trim() && !isLoading ? ' active' : '');
+}
+
+function escapeHtml(text) {
+  var div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+// Update send button on input
+document.getElementById('chatInput').addEventListener('input', updateSendBtn);
+
+// Email protection
+document.querySelectorAll('.email-protect').forEach(function(el){
+  el.textContent = el.dataset.u + String.fromCharCode(64) + el.dataset.d;
+});
+
+// Inicijalizacija
+setLang('en');
+</script>
+
+</body>
+</html>
